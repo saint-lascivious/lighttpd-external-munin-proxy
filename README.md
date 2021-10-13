@@ -42,12 +42,12 @@ sudo wget https://raw.githubusercontent.com/saint-lascivious/lighttpd-external-m
 sudo systemctl restart lighttpd
 ```
 
-# Contact
+## Contact
 * Discord
-[SaintLascivious](https://discord.gg/9Cq4gRg)
+[SaintLascivious](https://discord.gg/NC7taVyn)
 
 * Email
-saint.lascivious@gmail.com
+saint@sainternet.xyz
 
 * IRC
 [##saint-lascivious](https://webchat.freenode.net/##saint-lascivious)
