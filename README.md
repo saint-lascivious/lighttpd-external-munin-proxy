@@ -27,14 +27,22 @@ A black hole for Internet advertisements
 sudo apt install munin munin-node
 ```
 
-* Switch to the lighttpd directory
+* Download the lighttpd external.conf file
 ```
-cd /etc/lighttpd/
+sudo wget https://raw.githubusercontent.com/saint-lascivious/lighttpd-external-munin-proxy/master/etc/lighttpd/external.conf -P /etc/lighttpd
 ```
 
-* Download the config file
+* Or edit your existing lighttpd external.conf to include:
 ```
-sudo wget https://raw.githubusercontent.com/saint-lascivious/lighttpd-external-munin-proxy/master/etc/lighttpd/external.conf
+# Munin
+server.modules += ( "mod_alias", "mod_rewrite" )
+
+alias.url += ( "/munin-static" => "/etc/munin/static" )
+alias.url += ( "/munin"        => "/var/cache/munin/www/" )
+
+$HTTP["url"] =~ "^/munin" {
+    proxy.server = ("" => (( "host" => "127.0.0.1", "port" => 4948)))
+}
 ```
 
 * Restart lighttpd
