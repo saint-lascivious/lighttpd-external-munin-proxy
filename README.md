@@ -13,7 +13,7 @@ lighttpd1.4 on github for easier collaboration - main repo still on lighttpd.net
 
 Main repository for munin master / node / plugins
 
-* [MuninPiholePlugins](https://github.com/Rauks/MuninPiholePlugins)
+* [munin-pihole-plugins](https://github.com/saint-lascivious/munin-pihole-plugins)
 
 Munin plugins monitoring [Pi-Hole](https://pi-hole.net)
 
