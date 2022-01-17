@@ -4,7 +4,7 @@ lighttpd external.conf for Munin webserver proxy
 
 Simple [lighttpd](https://www.lighttpd.net/) external configuration file a [Munin](https://munin-monitoring.org/) webserver proxy. Works out of the box with the [Pi-hole](https://pi-hole.net/) web client.
 
-# Related projects
+## Related projects
 * [lighttpd](https://github.com/lighttpd/lighttpd1.4)
 
 lighttpd1.4 on github for easier collaboration - main repo still on lighttpd.net
@@ -38,17 +38,37 @@ sudo wget https://raw.githubusercontent.com/saint-lascivious/lighttpd-external-m
 server.modules += ( "mod_alias", "mod_rewrite" )
 
 alias.url += ( "/munin-static" => "/etc/munin/static" )
-alias.url += ( "/munin" => "/var/cache/munin/www/" )
+alias.url += ( "/munin"        => "/var/cache/munin/www/" )
 
-$HTTP["url"] =~ "^/munin" {
-    proxy.server = ( "" => ( "host" => "127.0.0.1", "port" => 4948 ) )
-}
+fastcgi.server += ("/munin-cgi/munin-cgi-graph" =>
+                   (( "socket"      => "/var/run/lighttpd/munin-cgi-graph.sock",
+                      "bin-path"    => "/usr/lib/munin/cgi/munin-cgi-graph",
+                      "check-local" => "disable",
+                   )),
+                  "/munin-cgi/munin-cgi-html" =>
+                   (( "socket"      => "/var/run/lighttpd/munin-cgi-html.sock",
+                      "bin-path"    => "/usr/lib/munin/cgi/munin-cgi-html",
+                      "check-local" => "disable",
+                   ))
+                 )
 
+url.rewrite-repeat += (
+                   "/munin/(.*)" => "/munin-cgi/munin-cgi-html/$1",
+                   "/munin-cgi/munin-cgi-html$" => "/munin-cgi/munin-cgi-html/",
+                   "/munin-cgi/munin-cgi-html/static/(.*)" => "/munin-static/$1"
+                   )
 ```
 
-* Restart lighttpd
+* Edit /etc/munin/munin.conf
+Ensure your `/etc/munin/munin.conf` file has the following values set:
 ```
-sudo systemctl restart lighttpd
+graph_strategy=cgi
+html_strategy=cgi
+```
+
+* Restart services
+```
+sudo systemctl restart lighttpd munin
 ```
 
 ## Contact
