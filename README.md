@@ -61,13 +61,6 @@ url.rewrite-repeat += (
                    )
 ```
 
-* Edit /etc/munin/munin.conf
-Ensure your `/etc/munin/munin.conf` file has the following values set:
-```
-graph_strategy=cgi
-html_strategy=cgi
-```
-
 * Restart services
 ```
 sudo systemctl restart lighttpd munin
